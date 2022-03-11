@@ -3,6 +3,9 @@ const { ProductCategory } = require("../models/productCategory");
 const express = require("express");
 const router = express.Router();
 
+// products REST APIs
+
+// get a list of products
 router.get(`/`, async (req, res) => {
     let filter = {};
 
@@ -10,6 +13,8 @@ router.get(`/`, async (req, res) => {
         filter = { category: req.query.category.split(",") };
     }
 
+    // Rather than display category by id, populate() fills out the
+    // the information about that category
     const productList = await Product.find(filter).populate("category");
 
     if (!productList) {
@@ -18,7 +23,9 @@ router.get(`/`, async (req, res) => {
     res.send(productList);
 });
 
+// Get a specific product by id
 router.get(`/:id`, async (req, res) => {
+    // Populate category metadata rather than display id of category
     const product = await Product.findById(req.params.id).populate("category");
     if (!product) {
         res.status(500).send("Invalid product ID");
@@ -26,7 +33,9 @@ router.get(`/:id`, async (req, res) => {
     res.send(product);
 });
 
+// Get a count of how many products
 router.get(`/get/count`, async (req, res) => {
+    // Have to use clone() because of the way mongoose runs queries
     const productCount = await Product.countDocuments((count) => count).clone();
     if (!productCount) {
         res.status(500).send("No products found");
@@ -36,6 +45,7 @@ router.get(`/get/count`, async (req, res) => {
     });
 });
 
+// Get a list of products with isFeatured: true
 router.get(`/get/featured`, async (req, res) => {
     const products = await Product.find({ isFeatured: true });
     if (!products) {
@@ -44,7 +54,9 @@ router.get(`/get/featured`, async (req, res) => {
     res.send(products);
 });
 
+// Post a new product
 router.post(`/`, async (req, res) => {
+    // Checks to make sure you are posting to an existing category
     const productCategory = await ProductCategory.findById(req.body.category);
     if (!productCategory) return res.status(400).send("Invalid Category");
 
@@ -66,7 +78,9 @@ router.post(`/`, async (req, res) => {
     return res.send(product);
 });
 
+// Put/Update a specific product
 router.put("/:id", async (req, res) => {
+    // Checks to make sure you are posting to an existing category
     const productCategory = await ProductCategory.findById(req.body.category);
     if (!productCategory) return res.status(400).send("Invalid Category");
 
@@ -82,6 +96,7 @@ router.put("/:id", async (req, res) => {
             countInStock: req.body.countInStock,
             category: req.body.category,
         },
+        // Option to allow return data to show the updated version of the object
         { new: true }
     );
     if (!product) {
@@ -90,6 +105,7 @@ router.put("/:id", async (req, res) => {
     res.send(product);
 });
 
+// Delete specific product by id
 router.delete(`/:id`, async (req, res) => {
     const product = await Product.findByIdAndRemove(req.params.id);
 

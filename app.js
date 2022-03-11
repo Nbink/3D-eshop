@@ -1,3 +1,4 @@
+// Required Libraries
 const express = require("express");
 const app = express();
 const morgan = require("morgan");
@@ -8,6 +9,7 @@ const errorHandler = require("./helpers/error-handler");
 const res = require("express/lib/response");
 
 require("dotenv/config");
+// Environmental Variables
 const api = process.env.API_URL;
 const uri = process.env.CONNECTION_STRING;
 
@@ -30,6 +32,7 @@ app.use(`${api}/productCategories`, productCategoriesRouter);
 app.use(`${api}/orders`, ordersRouter);
 app.use(`${api}/users`, usersRouter);
 
+// Database Connection
 mongoose
     .connect(uri, {
         useNewUrlParser: true,

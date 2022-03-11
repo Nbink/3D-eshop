@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+// product Class
 const productSchema = mongoose.Schema({
     name: {
         type: String,
@@ -31,6 +32,7 @@ const productSchema = mongoose.Schema({
         default: 0,
     },
     category: {
+        // Allows for reference to category by id
         type: mongoose.Schema.Types.ObjectId,
         ref: "ProductCategory",
         required: true,

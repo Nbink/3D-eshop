@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 
+// productCategory Class
+// NEEDS WORK
 const productCategorySchema = mongoose.Schema({
     name: {
         type: String,

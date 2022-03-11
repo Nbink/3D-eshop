@@ -2,6 +2,10 @@ const { Order } = require("../models/order");
 const express = require("express");
 const router = express.Router();
 
+// order REST APIs
+// NEEDS WORK
+
+// Get a list of orders
 router.get(`/`, async (req, res) => {
     const orderList = await Order.find();
     if (!orderList) {
@@ -10,6 +14,7 @@ router.get(`/`, async (req, res) => {
     res.send(orderList);
 });
 
+// Post a new order
 router.post(`/`, async (req, res) => {
     let order = new Order({
         orderItems: req.body.orderItems,

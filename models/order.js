@@ -1,8 +1,10 @@
 const mongoose = require("mongoose");
 
+// order Class
 const orderSchema = mongoose.Schema({
     orderItems: [
         {
+            // Allows for referenct to orderItem by id
             type: mongoose.Schema.Types.ObjectId,
             ref: "OrderItem",
             required: true,
@@ -39,6 +41,7 @@ const orderSchema = mongoose.Schema({
     totalPrice: {
         type: Number,
     },
+    // Allows for reference to User by id
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",

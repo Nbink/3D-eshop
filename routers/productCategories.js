@@ -5,6 +5,9 @@ const {
 const express = require("express");
 const router = express.Router();
 
+// productCategory REST APIs
+
+// Get a list of productCategories
 router.get(`/`, async (req, res) => {
     const productCategoryList = await ProductCategory.find();
     if (!productCategoryList) {
@@ -13,6 +16,7 @@ router.get(`/`, async (req, res) => {
     res.status(200).send(productCategoryList);
 });
 
+// Get a specific productCategory
 router.get("/:id", async (req, res) => {
     const productCategory = await ProductCategory.findById(req.params.id);
 
@@ -22,6 +26,7 @@ router.get("/:id", async (req, res) => {
     res.status(200).send(productCategory);
 });
 
+// Post a new productCategory
 router.post(`/`, async (req, res) => {
     let productCategory = new ProductCategory({
         name: req.body.name,
@@ -37,6 +42,7 @@ router.post(`/`, async (req, res) => {
     res.send(productCategory);
 });
 
+// Put/Update a specific productCategory
 router.put("/:id", async (req, res) => {
     const productCategory = await ProductCategory.findByIdAndUpdate(
         req.params.id,
@@ -53,6 +59,7 @@ router.put("/:id", async (req, res) => {
     res.send(productCategory);
 });
 
+// Delete a specific productCategory
 router.delete(`/:id`, async (req, res) => {
     const productCategory = await ProductCategory.findByIdAndRemove(
         req.params.id

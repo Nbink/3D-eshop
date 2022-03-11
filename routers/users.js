@@ -23,7 +23,9 @@ router.get("/:id", async (req, res) => {
     res.status(200).send(user);
 });
 
+// Get a count of how many users
 router.get(`/get/count`, async (req, res) => {
+    // Have to use clone() because of the way mongoose runs queries
     const userCount = await User.countDocuments((count) => count).clone();
     if (!userCount) {
         res.status(500).send("No users found");
@@ -33,10 +35,12 @@ router.get(`/get/count`, async (req, res) => {
     });
 });
 
+// Post new user
 router.post(`/`, async (req, res) => {
     let user = new User({
         name: req.body.name,
         email: req.body.email,
+        // Database never stores the password. It goes straight into hash.
         passwordHash: bcrypt.hashSync(req.body.password, 5),
         phone: req.body.phone,
         isAdmin: req.body.isAdmin,
@@ -55,20 +59,24 @@ router.post(`/`, async (req, res) => {
     res.send(user);
 });
 
+// Allows users to login and recieve JWT
 router.post(`/login`, async (req, res) => {
+    // Checks for existing account with provided email
     const user = await User.findOne({ email: req.body.email });
     const secret = process.env.secret;
 
     if (!user) {
         return res.status(400).send("No user found for that email");
     }
-
+    // If user uses an existing email to login then password is checked,
+    // if password is correct then they get a JWT with their id and their admin status
     if (user && bcrypt.compareSync(req.body.password, user.passwordHash)) {
         const token = jwt.sign(
             {
                 userId: user.id,
                 isAdmin: user.isAdmin,
             },
+            // JWT expires after 1 day
             secret,
             { expiresIn: "1d" }
         );
@@ -79,10 +87,12 @@ router.post(`/login`, async (req, res) => {
     }
 });
 
+// Allows a user to create a new account
 router.post(`/register`, async (req, res) => {
     let user = new User({
         name: req.body.name,
         email: req.body.email,
+        // Password is never stored. It goes straight into database as a hash
         passwordHash: bcrypt.hashSync(req.body.password, 5),
         phone: req.body.phone,
         isAdmin: req.body.isAdmin,
@@ -101,6 +111,7 @@ router.post(`/register`, async (req, res) => {
     res.send(user);
 });
 
+// Allow user to change their login information
 router.put("/:id", async (req, res) => {
     // Allow User to decide whether or not to change their password
     const userExists = await User.findById(req.params.id);
@@ -133,6 +144,7 @@ router.put("/:id", async (req, res) => {
     res.send(user);
 });
 
+// Delete a specific user
 router.delete(`/:id`, async (req, res) => {
     const user = await User.findByIdAndRemove(req.params.id);
 

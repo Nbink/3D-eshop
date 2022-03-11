@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+// orderItem Class
 const orderItemSchema = mongoose.Schema({
     quantity: {
         type: Number,
