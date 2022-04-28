@@ -7,7 +7,6 @@ const cors = require("cors");
 const authJwt = require("./helpers/jwt");
 const errorHandler = require("./helpers/error-handler");
 const res = require("express/lib/response");
-
 require("dotenv/config");
 // Environmental Variables
 const api = process.env.API_URL;
