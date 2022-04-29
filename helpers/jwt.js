@@ -11,6 +11,7 @@ function authJwt() {
     }).unless({
         // Allows users to use certain APIs without logging in
         path: [
+            { url: /\/public\/uploads(.*)/, methods: ["GET", "OPTIONS"] },
             { url: /\/api\/v1\/products(.*)/, methods: ["GET", "OPTIONS"] },
             {
                 url: /\/api\/v1\/productcategories(.*)/,

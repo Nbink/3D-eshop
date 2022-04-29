@@ -18,17 +18,6 @@ router.get(`/`, async (req, res) => {
     res.send(orderList);
 });
 
-/*router.get(`/:id`, async (req, res) => {
-    const order = await Order.findById(req.params.id)
-        .populate("user", "name")
-        .populate({ path: "orderItems", populate: "product" });
-    
-        if (!order) {
-        res.status(500).json({ success: false });
-    }
-    res.send(order);
-});*/
-
 router.get(`/:id`, async (req, res) => {
     const order = await Order.findById(req.params.id)
         .populate("user", "name")
@@ -146,6 +135,20 @@ router.get(`/get/count`, async (req, res) => {
     res.send({
         Count: orderCount,
     });
+});
+
+router.get(`/get/userorders/:userid`, async (req, res) => {
+    const userOrderList = await Order.find({ user: req.params.userid })
+        .populate({
+            model: OrderItem,
+            path: "orderItems",
+            populate: { path: "product", populate: "category" },
+        })
+        .sort({ dateOrdered: -1 });
+    if (!userOrderList) {
+        res.status(500).json({ success: false });
+    }
+    res.send(userOrderList);
 });
 
 module.exports = router;
