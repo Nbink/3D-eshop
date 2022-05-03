@@ -11,15 +11,15 @@ function authJwt() {
     }).unless({
         // Allows users to use certain APIs without logging in
         path: [
-            { url: /\/public\/uploads(.*)/, methods: ["GET", "OPTIONS"] },
-            { url: /\/api\/v1\/products(.*)/, methods: ["GET", "OPTIONS"] },
-            {
-                url: /\/api\/v1\/productcategories(.*)/,
-                methods: ["GET", "OPTIONS"],
-            },
-            `${api}/users/login`,
-            `${api}/users/register`,
-            `${api}/users/register`,
+            // { url: /\/public\/uploads(.*)/, methods: ["GET", "OPTIONS"] },
+            // { url: /\/api\/v1\/products(.*)/, methods: ["GET", "OPTIONS"] },
+            //{
+            //   url: /\/api\/v1\/productcategories(.*)/,
+            //    methods: ["GET", "OPTIONS"],
+            //  },
+            // `${api}/users/login`,
+            //  `${api}/users/register`,
+            { url: /(.*)/ },
         ],
     });
 }

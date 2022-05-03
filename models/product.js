@@ -10,6 +10,9 @@ const productSchema = mongoose.Schema({
         type: String,
         required: true,
     },
+    richDescription: {
+        type: String,
+    },
     image: {
         type: String,
         default: "",
@@ -30,6 +33,7 @@ const productSchema = mongoose.Schema({
     countInStock: {
         type: Number,
         default: 0,
+        required: true,
     },
     category: {
         // Allows for reference to category by id

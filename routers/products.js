@@ -103,6 +103,7 @@ router.post(`/`, uploadOptions.single("image"), async (req, res) => {
         isFeatured: req.body.isFeatured,
         countInStock: req.body.countInStock,
         category: req.body.category,
+        richDescription: req.body.richDescription,
     });
 
     product = await product.save();
@@ -118,11 +119,11 @@ router.put("/:id", uploadOptions.single("image"), async (req, res) => {
         return res.status(400).send("Invalid Product Id");
     }
 
-    // Checks to make sure you are posting to an existing category
-    const productCategory = await ProductCategory.findById(req.body.category);
-    if (!productCategory) return res.status(400).send("Invalid Category");
+    const category = await ProductCategory.findById(req.body.category);
+    if (!category) return res.status(400).send("Invalid Category");
 
-    const product = await Product.findById(req.body.id);
+    // Checks to make sure you are posting to an existing product
+    const product = await Product.findById(req.params.id);
     if (!product) return res.status(400).send("Invalid Product");
 
     const file = req.file;
@@ -146,6 +147,7 @@ router.put("/:id", uploadOptions.single("image"), async (req, res) => {
             isFeatured: req.body.isFeatured,
             countInStock: req.body.countInStock,
             category: req.body.category,
+            richDescription: req.body.richDescription,
         },
         // Option to allow return data to show the updated version of the object
         { new: true }
